@@ -1,0 +1,109 @@
+[
+    {
+        "id": "cd78e613020cac93",
+        "type": "inject",
+        "z": "cd9c985b3ffc507b",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 80,
+        "wires": [
+            [
+                "a15e3486546fa379"
+            ]
+        ]
+    },
+    {
+        "id": "a15e3486546fa379",
+        "type": "exec",
+        "z": "cd9c985b3ffc507b",
+        "command": "netstat -ant",
+        "addpay": "",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "",
+        "x": 270,
+        "y": 80,
+        "wires": [
+            [
+                "5d9200bfa1e57f03"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "5d9200bfa1e57f03",
+        "type": "split",
+        "z": "cd9c985b3ffc507b",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 430,
+        "y": 60,
+        "wires": [
+            [
+                "85e7e3b90c867900"
+            ]
+        ]
+    },
+    {
+        "id": "85e7e3b90c867900",
+        "type": "function",
+        "z": "cd9c985b3ffc507b",
+        "name": "extract connections",
+        "func": "var connections = msg.payload.match(/(\\d+.\\d+.\\d+.\\d+:\\d+)/); \n\nif (connections) {\n    msg.payload = connections;  \n    return msg; \n} else {\n    return null ; \n}\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 100,
+        "wires": [
+            [
+                "5d0c0ab6549b0466"
+            ]
+        ],
+        "info": "# extract connections\nscript looks for IP:port information in the line, \nif found, it adds an array element with the entry. \n\nBased on the output of netstat, the first element [0] is the local IP and the second element [1] is the destination ip. "
+    },
+    {
+        "id": "5d0c0ab6549b0466",
+        "type": "debug",
+        "z": "cd9c985b3ffc507b",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 690,
+        "y": 100,
+        "wires": []
+    }
+]

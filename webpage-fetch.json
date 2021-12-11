@@ -1,0 +1,199 @@
+[
+    {
+        "id": "f50c247c52dd7763",
+        "type": "inject",
+        "z": "4a4efd3802d37d12",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payloadType": "date",
+        "x": 100,
+        "y": 120,
+        "wires": [
+            [
+                "2ce3e6f844ac9dba"
+            ]
+        ]
+    },
+    {
+        "id": "2ce3e6f844ac9dba",
+        "type": "http request",
+        "z": "4a4efd3802d37d12",
+        "name": "set homepage",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://",
+        "tls": "05db2934de604ff3",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "senderr": false,
+        "x": 280,
+        "y": 120,
+        "wires": [
+            [
+                "1bca1ff8e04b4c74"
+            ]
+        ]
+    },
+    {
+        "id": "1bca1ff8e04b4c74",
+        "type": "switch",
+        "z": "4a4efd3802d37d12",
+        "name": "check status code",
+        "property": "statusCode",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "200",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 510,
+        "y": 120,
+        "wires": [
+            [
+                "5c74883d221ee2e2"
+            ],
+            [
+                "cd1dae92260f1725"
+            ]
+        ]
+    },
+    {
+        "id": "807c76b62b55f56e",
+        "type": "debug",
+        "z": "4a4efd3802d37d12",
+        "name": "success",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 920,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "cd1dae92260f1725",
+        "type": "function",
+        "z": "4a4efd3802d37d12",
+        "name": "show err code",
+        "func": "var newMsg = {}\nnewMsg.payload = \"Error code: \" + msg.statusCode; \n//newMsg.oldpayload = msg.payload; \nreturn newMsg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 720,
+        "y": 140,
+        "wires": [
+            [
+                "d44463e794f0cfec"
+            ]
+        ]
+    },
+    {
+        "id": "d44463e794f0cfec",
+        "type": "debug",
+        "z": "4a4efd3802d37d12",
+        "name": "not ok",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 910,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "5c74883d221ee2e2",
+        "type": "function",
+        "z": "4a4efd3802d37d12",
+        "name": "page last modified",
+        "func": "var newMsg = {}\nnewMsg.payload = \"Last Modified: \" + msg.headers[\"last-modified\"]; \nreturn newMsg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 730,
+        "y": 80,
+        "wires": [
+            [
+                "807c76b62b55f56e"
+            ]
+        ]
+    },
+    {
+        "id": "ebf3a7393596c3b9",
+        "type": "catch",
+        "z": "4a4efd3802d37d12",
+        "name": "",
+        "scope": [
+            "2ce3e6f844ac9dba"
+        ],
+        "uncaught": false,
+        "x": 270,
+        "y": 180,
+        "wires": [
+            [
+                "1c37d38f45157517"
+            ]
+        ]
+    },
+    {
+        "id": "1c37d38f45157517",
+        "type": "debug",
+        "z": "4a4efd3802d37d12",
+        "name": "Error",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 410,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "05db2934de604ff3",
+        "type": "tls-config",
+        "name": "",
+        "cert": "",
+        "key": "",
+        "ca": "",
+        "certname": "",
+        "keyname": "",
+        "caname": "",
+        "servername": "",
+        "verifyservercert": false,
+        "alpnprotocol": ""
+    }
+]
